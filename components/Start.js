@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
-export default class Screen1 extends React.Component {
+export default class Start extends React.Component {
   constructor(props){
     super(props);
     this.state={name: ''};
