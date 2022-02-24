@@ -14,9 +14,7 @@ export default class Chat extends React.Component {
         alignItems: 'center',
         backgroundColor: bgColor
       }}>
-        <Text>
-          Hi there!
-        </Text>
+        <Text> Hi there! </Text>
       </View>
     )
   }

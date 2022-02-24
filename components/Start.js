@@ -1,6 +1,6 @@
 import React from 'react';
-import BackgroundImage from '../assets/background-image.png';
-import icon from '../assets/user-icon.svg';
+import BackgroundImage from '../assets/background-img.png';
+import icon from '../assets/icon-user.svg';
 import {
   TextInput,
   StyleSheet,
@@ -29,8 +29,8 @@ export default class Start extends React.Component {
 
   // the background color used for updating the bgColor state
   colors = {
-    dark: '#090C08',
     purple: '#474056',
+    dark: '#090C08',
     blue: '#8A95A5',
     green: '#B9C6AE'
   };
