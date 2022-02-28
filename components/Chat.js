@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, Platform, KeyboardAvoidingView } from 'react-native';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { View, Platform, KeyboardAvoidingView } from 'react-native';
+import { GiftedChat, Bubble, SystemMessage, InputToolbar } from 'react-native-gifted-chat';
+import AsyncStorage from '@react-native-community/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 // importing Firestore
 const firebase = require('firebase');
@@ -19,7 +21,8 @@ export default class Chat extends React.Component {
         _id: "",
         name: "",
         avatar: "",
-      }
+      },
+      isConnected: false
     }
 
     //initialize app 
@@ -36,6 +39,41 @@ export default class Chat extends React.Component {
     }
   }
 
+  //load the messages from asyncStorage
+  async getMessages() {
+    let messages = '';
+    try {
+      //convert the saved string back into an object
+      messages = await AsyncStorage.getItem('messages') || [];
+      this.setState({
+        messages: JSON.parse(messages)
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  //save the message in the storage by converting the message object into a string
+  async saveMessages() {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  //delete the message from the storage
+  async deleteMessages() {
+    try {
+      await AsyncStorage.removeItem('messages');
+      this.setState({
+        messages: []
+      })
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   componentDidMount() {
     //sets the title once the Chat page is loaded
     let { name } = this.props.route.params;
@@ -45,15 +83,27 @@ export default class Chat extends React.Component {
     //references firestore database collection
     this.referenceMessages = firebase
       .firestore()
-      .collection('messages');
+      .collection('messages')
+      .where("uid", "==", this.state.uid)
 
-    //listens to authentication events
+    //fetch data from asyncStorage or Firestore
+    NetInfo.fetch().then(connection => {
+      if (connection.isConnected) {
+        this.setState({ isConnected: true });
+        console.log('online');
+      } else {
+        this.getMessages();
+        console.log('offline');
+      }
+    });
+
+    //listen to authentication events
     this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (!user) {
         await firebase.auth().signInAnonymously();
       }
 
-      //update user state with currently active user data
+      //update user state
       this.setState({
         uid: user.uid,
         messages: [],
@@ -98,6 +148,8 @@ export default class Chat extends React.Component {
     this.setState({
       messages: messages
     });
+    // save messages to the local storge
+    this.saveMessages()
   };
 
   //add new message to database collection
@@ -105,6 +157,7 @@ export default class Chat extends React.Component {
     const message = this.state.messages[0];
 
     this.referenceMessages.add({
+      uid: this.state.uid,
       _id: message._id,
       text: message.text,
       createdAt: message.createdAt,
@@ -118,7 +171,19 @@ export default class Chat extends React.Component {
       messages: GiftedChat.append(previousState.messages, messages),
     }), () => {
       this.addMessage();
+      this.saveMessages();
     })
+  }
+
+  //render the system message; the text color depends on the set background color
+  renderSystemMessage(props) {
+    const { bgColor } = this.props.route.params;
+    return (
+      <SystemMessage
+        {...props}
+        textStyle={{ color: bgColor === '#B9C6AE' ? '#555555' : '#dddddd' }}
+      />
+    );
   }
 
   //defines style of messages
@@ -134,6 +199,17 @@ export default class Chat extends React.Component {
     )
   };
 
+  renderInputToolbar(props) {
+    if (this.state.isConnected == false) {
+    } else {
+      return (
+        <InputToolbar
+          {...props}
+        />
+      );
+    }
+  }
+
   render() {
     /* applies the background color chosen by the user for Chat Room */
     const { bgColor } = this.props.route.params;
@@ -141,14 +217,15 @@ export default class Chat extends React.Component {
     return (
       <View style={{
         flex: 1,
-        /* justifyContent: 'center',
-        alignItems: 'center',*/
+        /* justifyContent: 'center' */
         backgroundColor: bgColor
       }}>
         <GiftedChat
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
           renderBubble={this.renderBubble.bind(this)}
+          renderSystemMessage={this.renderSystemMessage.bind(this)}
+          renderInputToolbar={this.renderInputToolbar.bind(this)}
           user={{
             _id: this.state.user._id,
             name: this.state.name,
