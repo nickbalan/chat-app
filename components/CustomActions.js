@@ -43,7 +43,7 @@ export default class CustomActions extends React.Component {
     );
   };
 
-  // choose image from Library function
+  // choose image from Library
   pickImage = async () => {
     const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
     if (status === 'granted') {
@@ -81,7 +81,7 @@ export default class CustomActions extends React.Component {
     }
   };
 
-  // upload image to Firestore function
+  // upload image to Firestore
   uploadImage = async uri => {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -110,14 +110,14 @@ export default class CustomActions extends React.Component {
 
   // User's location function
   getLocation = async () => {
-    // permission to access user location while the app is in the foreground
+    // permission to access user location
     const { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status === 'granted') {
       let result = await Location.getCurrentPositionAsync({}).catch(error => {
         console.error(error);
       });
-      // Send latitude and longitude to locate the position on the map
+      // Send latitude and longitude and the position on the map
       const longitude = JSON.stringify(result.coords.longitude);
       const latitude = JSON.stringify(result.coords.latitude);
       if (result) {

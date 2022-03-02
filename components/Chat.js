@@ -12,8 +12,6 @@ import {
   Day
 } from 'react-native-gifted-chat';
 // importing Firestore
-/* const firebase = require('firebase');
-require('firebase/firestore'); */
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
