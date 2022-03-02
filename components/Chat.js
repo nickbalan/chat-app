@@ -11,15 +11,13 @@ import {
   InputToolbar,
   Day
 } from 'react-native-gifted-chat';
-
 // importing Firestore
-/* const firebase = require('firebase');
-require('firebase/firestore'); */
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
 
 
 export default class Chat extends React.Component {
@@ -32,9 +30,11 @@ export default class Chat extends React.Component {
       user: {
         _id: "",
         name: "",
-        avatar: "",
+        avatar: ""
       },
-      isConnected: false
+      isConnected: false,
+      image: null,
+      location: null
     }
 
     //initialize app 
@@ -71,7 +71,9 @@ export default class Chat extends React.Component {
           _id: data.user._id,
           name: data.user.name,
           avatar: data.user.avatar
-        }
+        },
+        image: data.image || null,
+        location: data.location || null
       });
     });
     this.setState({
@@ -173,11 +175,12 @@ export default class Chat extends React.Component {
   addMessage() {
     const message = this.state.messages[0];
     this.referenceMessages.add({
-      uid: this.state.uid,
       _id: message._id,
       text: message.text,
       createdAt: message.createdAt,
-      user: this.state.user
+      user: this.state.user,
+      image: message.image || '',
+      location: message.location || null
     });
   }
 
@@ -193,13 +196,16 @@ export default class Chat extends React.Component {
 
   //render the system message; the text color depends on the set background color
   renderSystemMessage(props) {
-    const { bgColor } = this.props.route.params;
+    return <SystemMessage
+      {...props}
+      textStyle={{ color: '#736357' }} />;
+    /* const { bgColor } = this.props.route.params;
     return (
       <SystemMessage
         {...props}
         textStyle={{ color: bgColor === '#B9C6AE' ? '#555555' : '#dddddd' }}
       />
-    );
+    ); */
   }
 
   //defines style of messages
@@ -240,6 +246,33 @@ export default class Chat extends React.Component {
     }
   }
 
+  renderCustomActions = props => {
+    return <CustomActions {...props} />;
+  };
+
+  renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{
+            width: 150,
+            height: 100,
+            borderRadius: 13,
+            margin: 3,
+          }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     /* applies the background color chosen by the user for Chat Room */
     const { bgColor } = this.props.route.params;
@@ -256,6 +289,8 @@ export default class Chat extends React.Component {
           renderSystemMessage={this.renderSystemMessage.bind(this)}
           renderInputToolbar={this.renderInputToolbar.bind(this)}
           renderDay={this.renderDay}
+          renderActions={this.renderCustomActions}
+          renderCustomView={this.renderCustomView}
           user={{
             _id: this.state.user._id,
             name: this.state.name,
