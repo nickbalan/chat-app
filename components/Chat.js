@@ -79,6 +79,7 @@ export default class Chat extends React.Component {
     this.setState({
       messages: messages
     });
+    this.saveMessages();
   };
 
   //load the messages from asyncStorage
@@ -176,7 +177,7 @@ export default class Chat extends React.Component {
     const message = this.state.messages[0];
     this.referenceMessages.add({
       _id: message._id,
-      text: message.text,
+      text: message.text || '',
       createdAt: message.createdAt,
       user: this.state.user,
       image: message.image || '',
