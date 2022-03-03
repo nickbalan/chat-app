@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
-  View, 
-  Button 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
-import firebase from 'firebase';
+// importing Firestore
+import * as firebase from 'firebase';
 import 'firebase/firestore';
 
 export default class CustomActions extends React.Component {
@@ -45,7 +45,8 @@ export default class CustomActions extends React.Component {
 
   // choose image from Library
   pickImage = async () => {
-    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    //permission to access media library
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: 'Images',
@@ -62,10 +63,8 @@ export default class CustomActions extends React.Component {
 
   // Take photo function
   takePhoto = async () => {
-    const { status } = await Permissions.askAsync(
-      Permissions.MEDIA_LIBRARY,
-      Permissions.CAMERA
-    );
+    //permission to access camera and media library
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (status === 'granted') {
       let result = await ImagePicker.launchCameraAsync().catch(error =>
@@ -101,6 +100,11 @@ export default class CustomActions extends React.Component {
 
     const imageNameBefore = uri.split('/');
     const imageName = imageNameBefore[imageNameBefore.length - 1];
+    /* const storageRef = ref(storage, `images/${imageName}`);
+    await uploadBytes(storageRef, blob)
+    blob.close();
+
+    return await getDownloadURL(storageRef).then(url => url) */
     const ref = firebase.storage().ref().child(`images/${imageName}`);
     const snapshot = await ref.put(blob);
     blob.close();
