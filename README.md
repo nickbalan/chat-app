@@ -50,3 +50,8 @@ the latest news.
 - Install Expo globally `npm install --global expo-cli`
 - To start the app, run `expo start` or `npm start`
 - To run the app on a device, install an emulator or expo go on your smartphone.
+
+## Chat App screenshot
+
+![Livescreen](assets/Livescreen/Screenshot_Chat_App_1.JPG)
+![Livescreen](assets/Livescreen/Screenshot_Chat_App_2.JPG)
