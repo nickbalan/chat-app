@@ -53,5 +53,5 @@ the latest news.
 
 ## Chat App screenshot
 
-![Livescreen](assets/Livescreen/Screenshot_Chat_App_1.jpg)
-![Livescreen](assets/Livescreen/Screenshot_Chat_App_2.jpg)
+![Livescreen](assets/Livescreen/Screenshot_Chat_App_1_resize.jpg)
+![Livescreen](assets/Livescreen/Screenshot_Chat_App_2_resize.jpg)
