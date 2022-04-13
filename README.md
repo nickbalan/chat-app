@@ -1,4 +1,4 @@
-# Chat App
+# Chat App. Technical Case Study
 
 ## Objective 
 
@@ -22,13 +22,7 @@ To build a Chat App for mobile devices using React Native. The app will provide 
 - As a user, I should be able to read my messages offline so I can reread conversations at any time 
 - As a user with a visual impairment, I should be able to use a chat app compatible with a screen reader to engage with a chat interface. 
 
-## Key Features
-- A page where users can enter their name and choose a background color for the chat screen before joining the chat
-- A page displaying the conversation, as well as an input field and submit button
-- Two additional communication features: sending images and location data
-- Data gets stored both online and offline.
-
-## Technical Requirements 
+## Technical Requirements & Solutions 
 - The app must be written in React Native 
 - The app must be developed using Expo
 - The app must be styled according to the given screen design 
@@ -43,6 +37,12 @@ To build a Chat App for mobile devices using React Native. The app will provide 
 - The chat interface and functionality must be created using the Gifted Chat library
 - The app's codebase must contain comments.
 
+## Key Features
+- A page where users can enter their name and choose a background color for the chat screen before joining the chat
+- A page displaying the conversation, as well as an input field and submit button
+- Two additional communication features: sending images and location data
+- Data gets stored both online and offline.
+
 ## Installation
 - Fork or download directly this repo.
 - `npm install` or `yarn install` on the terminal to install all dependencies.
@@ -53,7 +53,7 @@ To build a Chat App for mobile devices using React Native. The app will provide 
 - To start the app, run `expo start` or `npm start`
 - To run the app on a device, install an emulator or Expo Go on your smartphone.
 
-## Chat App screenshot
+## Chat App screenshots
 
-![Livescreen](assets/Livescreen/Screenshot_Chat_App_1_resize.jpg)
-![Livescreen](assets/Livescreen/Screenshot_Chat_App_2_resize.jpg)
+![Livescreen](assets/Livescreen/Screenshot_Chat_App_1x.jpg)</br>
+![Livescreen](assets/Livescreen/Screenshot_Chat_App_2x.jpg)
