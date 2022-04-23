@@ -11,6 +11,9 @@ In the past, building high-quality mobile apps required a lot of time and money 
 
 Over time, however, new technologies emerged that made it easier for companies to build and maintain mobile applications using familiar syntax. One of these technologies is React Native, a framework for building Android and iOS apps that only requires one codebase.
 
+## Project Owner and Acknowledgement
+- CareerFoundry
+
 ## My Role
 - Full-Stack Web Developer
 
